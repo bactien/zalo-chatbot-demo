@@ -21,27 +21,22 @@ server.get('/', (req, res) => {
 });
 
 server.get('/webhook', (req, res) => {
-  console.log("User had send a message.");
+
   var data = req.query;
   var message = data.message;
   var userId = data.fromuid;
+  console.log(data);
   var returnMessage = "Bạn vừa nói: " + message;
-  ZOAClient.api('sendmessage/text', 'POST', { uid: userId, message: returnMessage }, function (response) {
+  console.log("User", userId, "had send a message.", message);
+  if (userId && message) {
 
-  // lấy thông tin người dùng 
-  // ZOAClient.api('getprofile', { uid: userId }, function (response) {
-  //  // var profile = response.data;
-  //   console.log(response);
-  //   if(response && response.data && response.data.hasOwnProperty('displayName')) {
-  //     var returnMessage = "Hello " + response.data.displayName + ". Bạn vừa nói: " + message;
-  //     ZOAClient.api('sendmessage/text', 'POST', { uid: userId, message: returnMessage }, function (response) {
-  //     });
-  //   } else { 
-  //     var returnMessage = "Bạn vừa nói: " + message;
-  //     ZOAClient.api('sendmessage/text', 'POST', { uid: userId, message: returnMessage }, function (response) {
-  //     });
-  //   }
-  });
+    ZOAClient.api('getprofile', { uid: userId }, function (response) {
+      var profile = response.data;
+      var returnMessage = "Chào " + profile.displayName + ". Bạn vừa nói: " + message;
+      ZOAClient.api('sendmessage/text', 'POST', { uid: userId, message: returnMessage }, function (profileResponse) {
+      });
+    });
+  }
 })
 
 
