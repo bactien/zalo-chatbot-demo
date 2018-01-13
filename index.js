@@ -25,15 +25,22 @@ server.get('/webhook', (req, res) => {
   var data = req.query;
   var message = data.message;
   var userId = data.fromuid;
+  var returnMessage = "Bạn vừa nói: " + message;
+  ZOAClient.api('sendmessage/text', 'POST', { uid: userId, message: returnMessage }, function (response) {
 
   // lấy thông tin người dùng 
-  ZOAClient.api('getprofile', { uid: userId }, function (response) {
-    var profile = response.data;
-    var username = profile.displayName;
-    // gửi tin nhắn đến người dùng
-    var returnMessage ="Hello " + username +". Bạn vừa nói: " + message;
-    ZOAClient.api('sendmessage/text', 'POST', { uid: userId, message: returnMessage }, function (response) {
-    });
+  // ZOAClient.api('getprofile', { uid: userId }, function (response) {
+  //  // var profile = response.data;
+  //   console.log(response);
+  //   if(response && response.data && response.data.hasOwnProperty('displayName')) {
+  //     var returnMessage = "Hello " + response.data.displayName + ". Bạn vừa nói: " + message;
+  //     ZOAClient.api('sendmessage/text', 'POST', { uid: userId, message: returnMessage }, function (response) {
+  //     });
+  //   } else { 
+  //     var returnMessage = "Bạn vừa nói: " + message;
+  //     ZOAClient.api('sendmessage/text', 'POST', { uid: userId, message: returnMessage }, function (response) {
+  //     });
+  //   }
   });
 })
 
